@@ -6,27 +6,34 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class DoctypeDocument extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'doctype_documents';
 
     protected $fillable = [
         'doctype_id',
-        'data',
-        'name',
-        'title',
+        'document_name',
         'status',
+        'data',
+        'meta',
         'created_by',
         'updated_by',
+        'published_at',
     ];
 
     protected $casts = [
         'data' => 'array',
+        'meta' => 'array',
+        'published_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
     ];
 
     protected $appends = ['display_name'];
