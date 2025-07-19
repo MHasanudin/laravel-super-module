@@ -16,18 +16,45 @@ class Doctype extends Model
     protected $fillable = [
         'name',
         'label',
-        'schema',
-        'config',
+        'description',
+        'fields',
+        'settings',
+        'is_active',
+        'is_system',
+        'icon',
+        'color',
+        'module',
+        'sort_order',
     ];
 
     protected $casts = [
-        'schema' => 'array',
-        'config' => 'array',
+        'fields' => 'array',
+        'settings' => 'array',
+        'is_active' => 'boolean',
+        'is_system' => 'boolean',
+        'sort_order' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function documents(): HasMany
     {
         return $this->hasMany(DoctypeDocument::class, 'doctype_id');
+    }
+
+    public function doctypeFields(): HasMany
+    {
+        return $this->hasMany(DoctypeField::class, 'doctype_id')->orderBy('sort_order');
+    }
+
+    public function activeDocuments(): HasMany
+    {
+        return $this->documents()->where('status', '!=', 'Archived');
+    }
+
+    public function publishedDocuments(): HasMany
+    {
+        return $this->documents()->where('status', 'Published');
     }
 
     public function getTableAttribute(): string

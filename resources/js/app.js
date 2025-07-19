@@ -1,7 +1,9 @@
 import '../css/app.css';
 import './bootstrap';
 import { createApp } from 'vue';
-import DoctypeDemo from './features/doctypes/pages/DoctypeDemo.vue';
+import App from './App.vue';
 import router from './router';
 
-createApp(DoctypeDemo).use(router).mount('#app');
+const app = createApp(App);
+app.use(router);
+app.mount('#app');

@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     './resources/**/*.blade.php',
@@ -7,7 +8,14 @@ module.exports = {
     './resources/js/features/doctypes/**/*.vue',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'sans': ['Instrument Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
+    },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+  ],
 }; 

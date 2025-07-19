@@ -35,7 +35,9 @@ class DoctypeServiceProvider extends ServiceProvider
     {
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
-        $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+        
+        // Load routes - disable automatic loading since we use module auto-loader
+        // $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
 
         // Publish config
         $this->publishes([
