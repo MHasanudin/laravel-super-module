@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use App\Models\{{ model }};
+use App\Http\Requests\Store{{ model }}Request;
+use App\Http\Requests\Update{{ model }}Request;
+
+class {{ model }}Controller extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:view {{ permission }}')->only(['index', 'show']);
+        $this->middleware('permission:create {{ permission }}')->only(['create', 'store']);
+        $this->middleware('permission:update {{ permission }}')->only(['edit', 'update']);
+        $this->middleware('permission:delete {{ permission }}')->only(['destroy']);
+    }
+
+    public function index(Request $request)
+    {
+        $query = {{ model }}::query();
+
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        ${{ table }} = $query->paginate(10)->withQueryString();
+
+        return Inertia::render('{{ plural }}/Index', [
+            '{{ table }}' => ${{ table }},
+            'filters' => $request->only(['search']),
+        ]);
+    }
+
+    public function create() 
+    { 
+        return Inertia::render('{{ plural }}/Create'); 
+    }
+
+    public function store(Store{{ model }}Request $request)
+    {
+        {{ model }}::create($request->validated());
+        return redirect()->route('{{ kebab }}.index')->with('success', '{{ model }} created successfully');
+    }
+
+    public function show({{ model }} ${{ table }}) 
+    { 
+        return Inertia::render('{{ plural }}/Show', ['item' => ${{ table }}]); 
+    }
+
+    public function edit({{ model }} ${{ table }}) 
+    { 
+        return Inertia::render('{{ plural }}/Edit', ['item' => ${{ table }}]); 
+    }
+
+    public function update(Update{{ model }}Request $request, {{ model }} ${{ table }})
+    {
+        ${{ table }}->update($request->validated());
+        return redirect()->route('{{ kebab }}.index')->with('success', '{{ model }} updated successfully');
+    }
+
+    public function destroy({{ model }} ${{ table }})
+    {
+        ${{ table }}->delete();
+        return redirect()->route('{{ kebab }}.index')->with('success', '{{ model }} deleted successfully');
+    }
+}
